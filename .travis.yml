@@ -1,0 +1,21 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t kerrylumi/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true kerrylumi/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t kerrylumi/multi-client ./client
+  - docker build -t kerrylumo/multi-nginx ./nginx
+  - docker build -t kerrylumi/multi-server ./server
+  - docker build -t kerrylumi/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push kerrylumi/multi-client
+  - docker push kerrylumi/multi-nginx
+  - docker push kerrylumi/multi-server
+  - docker push kerrylumi/multi-worker
