@@ -11,7 +11,7 @@ script:
 
 after_success:
   - docker build -t kerrylumi/multi-client ./client
-  - docker build -t kerrylumo/multi-nginx ./nginx
+  - docker build -t kerrylumi/multi-nginx ./nginx
   - docker build -t kerrylumi/multi-server ./server
   - docker build -t kerrylumi/multi-worker ./worker
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
